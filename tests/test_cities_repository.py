@@ -21,7 +21,7 @@ class TestCitiesRepository:
 
         assert len(cities) == 0
 
-    def test_adds_a_city(self):
+    def test_adds_cities(self):
         timbo = City('Timbó')
         blumenau = City('Blumenau')
 
