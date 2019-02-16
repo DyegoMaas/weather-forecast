@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dc307016c9e70fe0936354c47a979e74bcc7c26ab2af26235cb1e63d5eb25d3b"
+            "sha256": "1f30d42a0b731e0a3f4904c49bff2c9e3f267b148001ae27229da3e70f273c99"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -138,6 +138,13 @@
                 "sha256:e76826342cefe3c3d5f7e8ee4316b80d1dd8a300781612ddbc765c17ba25a6c6"
             ],
             "version": "==1.7.0"
+        },
+        "pymox": {
+            "hashes": [
+                "sha256:d4d2476be603e078f24768dc874f806ffa8e6dc61b2c9746566ff39b2a7d4935"
+            ],
+            "index": "pypi",
+            "version": "==0.7.8"
         },
         "pytest": {
             "hashes": [
