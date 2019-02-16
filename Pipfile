@@ -10,6 +10,7 @@ pymox = "*"
 [packages]
 flask = "*"
 jsonpickle = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"
