@@ -11,6 +11,7 @@ pymox = "*"
 flask = "*"
 jsonpickle = "*"
 requests = "*"
+flask-injector = "*"
 
 [requires]
 python_version = "3.7"

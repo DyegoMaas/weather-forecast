@@ -1,6 +1,6 @@
 from repositories.repositories import CitiesRepository, CitiesRepositoryProxy
 from repositories.entities import City
-from web_apis.forecasts import OpenWeatherAPI
+from web_apis.forecasts import OpenWeatherMapAPI
 import pytest
 from mox import MoxTestBase, IgnoreArg
 import os
@@ -41,7 +41,7 @@ class TestCitiesRepositoryProxy(MoxTestBase):
 
     def test_lets_add_city(self):
         cities_repository_fake = CitiesRepositoryFake()
-        open_weather_mock = self.mox.CreateMock(OpenWeatherAPI)
+        open_weather_mock = self.mox.CreateMock(OpenWeatherMapAPI)
         open_weather_mock.verify_city_exists('Tokyo').AndReturn(True)
         self.mox.ReplayAll()
 
@@ -53,7 +53,7 @@ class TestCitiesRepositoryProxy(MoxTestBase):
 
     def test_prevents_add_city(self):
         cities_repository_fake = CitiesRepositoryFake()
-        open_weather_mock = self.mox.CreateMock(OpenWeatherAPI)
+        open_weather_mock = self.mox.CreateMock(OpenWeatherMapAPI)
         open_weather_mock.verify_city_exists(IgnoreArg()).AndReturn(False)
         self.mox.ReplayAll()
 

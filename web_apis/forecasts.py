@@ -1,7 +1,8 @@
 import requests
 
 
-class OpenWeatherAPI:
+class OpenWeatherMapAPI:
+    """Simple API built upon https://openweathermap.org/forecast5"""
 
     def verify_city_exists(self, city_name) -> bool:
         forecast = self.get_city_forecast_for_next_5_days(city_name)
@@ -25,5 +26,5 @@ class ForecastData:
     def data_was_found(self) -> bool:
         return self.data["cod"] == '200'
 
-    def extract(self) -> dict:
+    def extract(self) -> list:
         return self.data["list"] if self.data_was_found() else []
