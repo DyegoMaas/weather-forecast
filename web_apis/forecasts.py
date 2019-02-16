@@ -5,16 +5,16 @@ class OpenWeatherAPI:
 
     def verify_city_exists(self, city_name) -> bool:
         forecast = self.get_city_forecast_for_next_5_days(city_name)
-        return forecast['cod'] == 200
+        return forecast.data_was_found()
 
     def get_city_forecast_for_next_5_days(self, city_name):
-        """Atualmente suporta apenas cidades brasileiras."""
+        """Currently, it supports only brazilian cities."""
 
         appid = 'eb8b1a9405e659b2ffc78f0a520b1a46'  # TODO move to an environment variable
         url = f' http://api.openweathermap.org/data/2.5/forecast?q={city_name},br&mode=json&appid={appid}'
-        forecast = requests.get(url)
+        json = requests.get(url).json()
 
-        return forecast.json()
+        return ForecastData(json)
 
 
 class ForecastData:
