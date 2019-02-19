@@ -7,7 +7,7 @@ class TestForecastDataExtraction:
 
     @pytest.fixture()
     def valid_forecast_data(self):
-        with open('fixtures/valid_forecast.json') as file:
+        with open('tests/fixtures/valid_forecast.json') as file:
             file_content = file.read()
             return json.loads(file_content)
 
