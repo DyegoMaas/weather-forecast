@@ -1,4 +1,5 @@
 import requests
+import urllib
 
 
 class OpenWeatherMapAPI:
@@ -10,7 +11,8 @@ class OpenWeatherMapAPI:
     def get_city_forecast_for_next_5_days(self, city_name):
         """Currently, it supports only brazilian cities."""
 
-        url = f' http://api.openweathermap.org/data/2.5/forecast?q={city_name},br&mode=json&appid={self.app_id}'
+        query_string = urllib.parse.urlencode({'q': city_name, 'mode': 'json', 'appid': self.app_id})
+        url = f' http://api.openweathermap.org/data/2.5/forecast?{query_string}'
         json = requests.get(url).json()
 
         return ForecastData(json)
