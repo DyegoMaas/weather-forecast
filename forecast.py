@@ -1,54 +1,59 @@
 from flask import Flask
 from flask_injector import FlaskInjector
 from injector import inject, singleton
-from repositories.repositories import CitiesRepository, CitiesRepositoryProxy
+from repositories.repositories import CitiesRepository
+from services.cities_service import CitiesService
 from web_apis.forecasts import OpenWeatherMapAPI
 from repositories.entities import City
 import json
 
-app = Flask(__name__, '/api')
+
+app = Flask(__name__)
 
 
-@app.route('/')
-class Forecast:
+@inject
+@app.route('/', methods=['GET'])
+def hello() -> str:
+    return "Let's forecast!"
 
-    @inject(open_weather_api=OpenWeatherMapAPI, cities_repository=CitiesRepository)
-    def __init__(self, open_weather_api, cities_repository):
-        self.weather_api = open_weather_api
-        self.cities_repository = cities_repository
 
-    @app.route('/')
-    def hello(self) -> str:
-        return "Let's forecast!"
+@inject
+@app.route('/cities', methods=['GET'])
+def list_cities(cities_repository: CitiesRepository):
+    all_cities = cities_repository.get_all()
+    stored_cities = [city.name for city in all_cities]
+    return json.dumps(stored_cities)
 
-    @app.route('/cities', methods=['GET'])
-    def list_cities(self):
-        all_cities = self.cities_repository.get_all()
-        stored_cities = [city.name for city in all_cities]
-        return json.dump(stored_cities)
 
-    @app.route('/forecast/{city_name}', methods=['POST'])
-    def add_city(self, city_name):
-        forecast = self.weather_api.get_city_forecast_for_next_5_days(city_name)
+@inject
+@app.route('/forecast/<city_name>', methods=['POST'])
+def add_city(city_name, city_service: CitiesService):
+    city = City(city_name)
+    forecast = city_service.get_forecast_for(city)
 
-        if forecast.data_was_found():
-            city = City(city_name)
-            self.cities_repository.add(city)
+    if not forecast.found_data():
+        return []
 
-        # TODO transform response
-        return forecast
+    # TODO transform response
+    return forecast
 
 
 def configure(binder):
     binder.bind(
-        CitiesRepository,
-        to=CitiesRepositoryProxy(CitiesRepository()),
+        OpenWeatherMapAPI,
+        to=OpenWeatherMapAPI(),
         scope=singleton
     )
 
     binder.bind(
-        OpenWeatherMapAPI,
-        to=OpenWeatherMapAPI(),
+        CitiesRepository,
+        to=CitiesRepository,
+        scope=singleton  # TODO request
+    )
+
+    binder.bind(
+        CitiesService,
+        to=CitiesService,
         scope=singleton
     )
 

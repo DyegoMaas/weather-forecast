@@ -4,10 +4,6 @@ import requests
 class OpenWeatherMapAPI:
     """Simple API built upon https://openweathermap.org/forecast5"""
 
-    def verify_city_exists(self, city_name) -> bool:
-        forecast = self.get_city_forecast_for_next_5_days(city_name)
-        return forecast.data_was_found()
-
     def get_city_forecast_for_next_5_days(self, city_name):
         """Currently, it supports only brazilian cities."""
 
@@ -23,7 +19,7 @@ class ForecastData:
     def __init__(self, forecast_data):
         self.data = forecast_data
 
-    def data_was_found(self) -> bool:
+    def found_data(self) -> bool:
         return self.data["cod"] == '200'
 
     def extract(self) -> list:

@@ -18,12 +18,12 @@ class TestForecastDataExtraction:
     def test_forecast_was_found(self, valid_forecast_data):
         forecast = ForecastData(valid_forecast_data)
 
-        assert forecast.data_was_found() is True
+        assert forecast.found_data() is True
 
     def test_forecast_was_not_found_for_some_city(self, invalid_forecast_data):
         forecast = ForecastData(invalid_forecast_data)
 
-        assert forecast.data_was_found() is False
+        assert forecast.found_data() is False
 
     def test_extracts_nothing_from_an_invalid_response(self, invalid_forecast_data):
         forecast_data = ForecastData(invalid_forecast_data)

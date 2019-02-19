@@ -1,4 +1,4 @@
-from repositories.repositories import CitiesRepository, CitiesRepositoryProxy
+from repositories.repositories import CitiesRepository
 from repositories.entities import City
 from web_apis.forecasts import OpenWeatherMapAPI
 import pytest
@@ -35,44 +35,3 @@ class TestCitiesRepository:
         assert len(cities) == 2
         assert cities[0].name == timbo.name
         assert cities[1].name == blumenau.name
-
-
-class TestCitiesRepositoryProxy(MoxTestBase):
-
-    def test_lets_add_city(self):
-        cities_repository_fake = CitiesRepositoryFake()
-        open_weather_mock = self.mox.CreateMock(OpenWeatherMapAPI)
-        open_weather_mock.verify_city_exists('Tokyo').AndReturn(True)
-        self.mox.ReplayAll()
-
-        proxy = CitiesRepositoryProxy(cities_repository_fake, open_weather_mock)
-        proxy.add(City('Tokyo'))
-
-        cities = proxy.get_all()
-        assert len(cities) == 1
-
-    def test_prevents_add_city(self):
-        cities_repository_fake = CitiesRepositoryFake()
-        open_weather_mock = self.mox.CreateMock(OpenWeatherMapAPI)
-        open_weather_mock.verify_city_exists(IgnoreArg()).AndReturn(False)
-        self.mox.ReplayAll()
-
-        proxy = CitiesRepositoryProxy(cities_repository_fake, open_weather_mock)
-        proxy.add(City('Tokyo'))
-
-        cities = proxy.get_all()
-        assert len(cities) == 0
-
-
-class CitiesRepositoryFake(CitiesRepository):
-
-    def __init__(self):
-        self.cities = []
-
-    def get_all(self):
-        return self.cities
-
-    def add(self, city):
-        self.cities.append(city)
-
-
