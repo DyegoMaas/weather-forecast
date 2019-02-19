@@ -24,6 +24,8 @@ A aplicação utiliza uma arquitetura cliente servidor que se assemelha estrutur
 
 O servidor web é feito com o microframework `Flask`, auto-hospedado, rodando na porta 8003, e que fornece tanto o conteúdo estático para a interface gráfica quanto os endpoints de consulta da API.
 
+A injeção de dependência é feita com `inject` e `FlaskInject`.
+
 Os testes unitários foram implementados utilizando a biblioteca `pytest`. Para a criação de mocks, foi utilizada a biblioteca `pymox`.
 
 Como sugerido na especificação, foi implementado salvamento em arquivo. O formato escolhido foi o JSON Lines.
