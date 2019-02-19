@@ -1,8 +1,6 @@
 from repositories.repositories import CitiesRepository
 from repositories.entities import City
-from web_apis.forecasts import OpenWeatherMapAPI
 import pytest
-from mox import MoxTestBase, IgnoreArg
 import os
 
 
