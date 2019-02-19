@@ -7,4 +7,4 @@ cache: pip
 install:
   - pipenv install
 script:
-  - python -m pytest /tests
+  - pipenv run python -m pytest tests/
