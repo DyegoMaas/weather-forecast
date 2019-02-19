@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, render_template
 from flask_injector import FlaskInjector
 from injector import inject, singleton
 from repositories.repositories import CitiesRepository
@@ -9,7 +9,7 @@ import json
 
 
 def create_app(config=None, environment=None):
-    new_app = Flask(__name__)
+    new_app = Flask(__name__,  static_url_path='', static_folder='static', template_folder='templates')
 
     new_app.config.from_object('config_module.DevelopmentConfig')
     new_app.config.update(config or {})
@@ -22,7 +22,7 @@ app = create_app()
 
 @app.route('/', methods=['GET'])
 def hello():
-    return redirect("/static/index.html", code=304)
+    return render_template('index.html')
 
 
 @inject
