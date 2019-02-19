@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_injector import FlaskInjector
 from injector import inject, singleton
 from repositories.repositories import CitiesRepository
@@ -20,14 +20,13 @@ def create_app(config=None, environment=None):
 app = create_app()
 
 
-@inject
 @app.route('/', methods=['GET'])
-def hello() -> str:
-    return "Let's forecast!"
+def hello():
+    return redirect("/static/index.html", code=304)
 
 
 @inject
-@app.route('/cities', methods=['GET'])
+@app.route('/api/cities', methods=['GET'])
 def list_cities(cities_repository: CitiesRepository):
     all_cities = cities_repository.get_all()
     stored_cities = [city.name for city in all_cities]
@@ -35,7 +34,7 @@ def list_cities(cities_repository: CitiesRepository):
 
 
 @inject
-@app.route('/forecast/<city_name>', methods=['POST'])
+@app.route('/api/forecast/<city_name>', methods=['POST'])
 def add_city(city_name, city_service: CitiesService):
     city = City(city_name)
     forecast = city_service.get_forecast_for(city)
