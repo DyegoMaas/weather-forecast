@@ -12,6 +12,7 @@ flask = "*"
 jsonpickle = "*"
 requests = "*"
 flask-injector = "*"
+ordbok = "*"
 
 [requires]
 python_version = "3.7"

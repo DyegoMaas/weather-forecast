@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, current_app
 from flask_injector import FlaskInjector
 from injector import inject, singleton
 from repositories.repositories import CitiesRepository
@@ -8,7 +8,16 @@ from repositories.entities import City
 import json
 
 
-app = Flask(__name__)
+def create_app(config=None, environment=None):
+    new_app = Flask(__name__)
+
+    new_app.config.from_object('config_module.DevelopmentConfig')
+    new_app.config.update(config or {})
+
+    return new_app
+
+
+app = create_app()
 
 
 @inject
@@ -36,16 +45,17 @@ def add_city(city_name, city_service: CitiesService):
 
 
 def configure(binder):
+    open_weather_api_key = app.config['OPEN_WEATHER_APP_ID']
     binder.bind(
         OpenWeatherMapAPI,
-        to=OpenWeatherMapAPI(),
+        to=OpenWeatherMapAPI(open_weather_api_key),
         scope=singleton
     )
 
     binder.bind(
         CitiesRepository,
         to=CitiesRepository,
-        scope=singleton  # TODO request
+        scope=singleton
     )
 
     binder.bind(
@@ -56,6 +66,5 @@ def configure(binder):
 
 
 FlaskInjector(app=app, modules=[configure])
-
 
 app.run()
