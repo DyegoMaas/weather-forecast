@@ -23,4 +23,4 @@ class ForecastData:
         return self.data["cod"] == '200'
 
     def extract(self) -> list:
-        return self.data["list"] if self.data_was_found() else []
+        return self.data["list"] if self.found_data() else []

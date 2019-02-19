@@ -31,11 +31,8 @@ def add_city(city_name, city_service: CitiesService):
     city = City(city_name)
     forecast = city_service.get_forecast_for(city)
 
-    if not forecast.found_data():
-        return []
-
-    # TODO transform response
-    return forecast
+    result = forecast.extract() if forecast.found_data() else []
+    return json.dumps(result)
 
 
 def configure(binder):
