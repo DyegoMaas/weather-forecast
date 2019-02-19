@@ -1,4 +1,4 @@
-from flask import Flask, current_app
+from flask import Flask
 from flask_injector import FlaskInjector
 from injector import inject, singleton
 from repositories.repositories import CitiesRepository
@@ -66,5 +66,12 @@ def configure(binder):
 
 
 FlaskInjector(app=app, modules=[configure])
+
+
+@app.errorhandler(Exception)
+def handle_global_error(exception):
+    print(exception)
+    return "An error has occured. Please try again later."
+
 
 app.run()
