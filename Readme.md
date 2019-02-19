@@ -26,6 +26,8 @@ O servidor web é feito com o microframework `Flask`, auto-hospedado, rodando na
 
 Os testes unitários foram implementados utilizando a biblioteca `pytest`. Para a criação de mocks, foi utilizada a biblioteca `pymox`.
 
+Como sugerido na especificação, foi implementado salvamento em arquivo. O formato escolhido foi o JSON Lines.
+
 ### Integração Contínua
 
 O pipeline de integração contínua está rodando no Travis CI, rodando os testes com a lib `pytest`.
