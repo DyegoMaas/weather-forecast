@@ -33,3 +33,13 @@ class TestCitiesRepository:
         assert len(cities) == 2
         assert cities[0].name == timbo.name
         assert cities[1].name == blumenau.name
+
+    def test_prevents_adding_duplicates(self):
+        timbo = City('Timbó')
+
+        repository = CitiesRepository()
+        repository.add(timbo)
+        repository.add(timbo)
+
+        cities = list(repository.get_all())
+        assert len(cities) == 1
