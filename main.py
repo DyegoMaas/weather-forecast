@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_injector import FlaskInjector
 from injector import inject, singleton
 from repositories.repositories import CitiesRepository
@@ -8,11 +9,14 @@ from repositories.entities import City
 import json
 
 
-def create_app(config=None, environment=None):
-    new_app = Flask(__name__,  static_url_path='', static_folder='static', template_folder='templates')
+def create_app(config=None):
+    new_app = Flask(__name__)
 
     new_app.config.from_object('config_module.DevelopmentConfig')
     new_app.config.update(config or {})
+
+    # enable CORS
+    CORS(new_app)
 
     return new_app
 
@@ -20,17 +24,12 @@ def create_app(config=None, environment=None):
 app = create_app()
 
 
-@app.route('/', methods=['GET'])
-def hello():
-    return render_template('index.html')
-
-
 @inject
 @app.route('/api/cities', methods=['GET'])
 def list_cities(cities_repository: CitiesRepository):
     all_cities = cities_repository.get_all()
     stored_cities = [city.name for city in all_cities]
-    return json.dumps(stored_cities)
+    return jsonify(stored_cities)
 
 
 @inject
@@ -40,7 +39,7 @@ def add_city(city_name, city_service: CitiesService):
     forecast = city_service.get_forecast_for(city)
 
     result = forecast.extract() if forecast.found_data() else []
-    return json.dumps(result)
+    return jsonify(result)
 
 
 def configure(binder):
