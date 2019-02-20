@@ -16,7 +16,7 @@ Em seguida rode o comando `pipenv install`.
 
 ### Backend - Flask
 
-Para rodar a aplicação, navegue até a raiz no console e rode o comando `pipenv shell` para ativar o *virtual environment*. Em seguida rode o comando `python main.py`.
+Para rodar a aplicação, navegue até a raiz no console e rode o comando `pipenv run python main.py`.
 
 A aplicação vai subir um servidor web auto-hospedado, rodando na **porta 8003**. Caso for necessário trocar a porta, é possível fazê-lo na última linha do arquivo `main.py`.
 
