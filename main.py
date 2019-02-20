@@ -34,7 +34,7 @@ def list_cities(cities_repository: CitiesRepository):
 
 @inject
 @app.route('/api/forecast/<city_name>', methods=['POST'])
-def add_city(city_name, city_service: CitiesService):
+def get_forecast(city_name, city_service: CitiesService):
     city = City(city_name)
     forecast = city_service.get_forecast_for(city)
 
