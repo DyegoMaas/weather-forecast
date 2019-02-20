@@ -26,6 +26,10 @@ Para rodar a aplicação de frontend será necessário ter instalado o NodeJS 8.
 
 A aplicação rodará em http://localhost:8080.
 
+#### Gerando pacote para deploy
+
+Para gerar um pacote de deploy, basta rodar o comando `npm run build`. Ao término da compilação, o resultado estará disponível no diretório `dist`.
+
 ## Arquitetura
 
 A aplicação utiliza uma arquitetura cliente servidor que se assemelha estruturalmente a uma aplicação empresarial simples, disponibilizando uma API REST para consumo pelo frontend.
