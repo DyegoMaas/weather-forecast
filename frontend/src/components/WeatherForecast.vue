@@ -47,18 +47,20 @@
       </div>
       <div class="col-lg-8 col-md-12">
         <template v-if="mustShowDetails">
-          <div class="page-header">
-            <h2>Previsão do tempo para {{ currentCity }}</h2>
-          </div>
+          <city-forecast :current-city="currentCity" :forecast="forecast"></city-forecast>
         </template>
       </div>
     </div>
 </template>
 
 <script>
+import CityForecast from './CityForecast';
 
 export default {
   name: 'WeatherForecast',
+  components: {
+    'city-forecast': CityForecast,
+  },
   data() {
     return {
       cities: [],
