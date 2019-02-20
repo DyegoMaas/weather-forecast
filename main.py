@@ -6,7 +6,6 @@ from repositories.repositories import CitiesRepository
 from services.cities_service import CitiesService
 from web_apis.forecasts import OpenWeatherMapAPI
 from repositories.entities import City
-import json
 
 
 def create_app(config=None):

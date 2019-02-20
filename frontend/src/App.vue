@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <h1>Previsão do Tempo</h1>
-    <router-view/>
+    <div class="container">
+      <div class="page-header">
+        <h1>Previsão do Tempo</h1>
+      </div>
+      <router-view/>
+    </div>
   </div>
 </template>
 
