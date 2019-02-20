@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: 'WeatherForecast',
@@ -83,7 +82,7 @@ export default {
   methods: {
     refreshCitiesList() {
       const vm = this;
-      axios.get('http://localhost:8003/api/cities')
+      this.axios.get('/cities')
         .then((res) => {
           vm.cities = res.data;
         })
@@ -95,15 +94,11 @@ export default {
     getForecastForCity() {
       const vm = this;
 
-      const url = 'http://localhost:8003/api/forecast/' + vm.citySearched;
-      axios.post(url)
-        .then((res) => {
-          vm.forecast = res.data;
-
-          vm.updateSearchHistory();
-          vm.refreshCitiesList();
-          vm.showDetails(vm.citySearched);
-        })
+      this.axios.post(`/forecast/${vm.citySearched}`)
+        .then((res) => { vm.forecast = res.data; })
+        .then(() => { vm.updateSearchHistory(); })
+        .then(() => { vm.refreshCitiesList(); })
+        .then(() => { vm.showDetails(vm.citySearched); })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
@@ -118,8 +113,7 @@ export default {
     getDetails(city) {
       const vm = this;
 
-      const url = 'http://localhost:8003/api/forecast/' + city;
-      axios.post(url)
+      this.axios.post(`/forecast/${city}`)
         .then((res) => {
           vm.currentCity = city;
           vm.forecast = res.data;
