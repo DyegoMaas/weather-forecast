@@ -14,9 +14,17 @@ Em seguida rode o comando `pipenv install`.
 
 ## Rodando a aplicação
 
+### Backend - Flask
+
 Para rodar a aplicação, navegue até a raiz no console e rode o comando `pipenv shell` para ativar o *virtual environment*. Em seguida rode o comando `python main.py`.
 
 A aplicação vai subir um servidor web auto-hospedado, rodando na **porta 8003**. Caso for necessário trocar a porta, é possível fazê-lo na última linha do arquivo `main.py`.
+
+### Frontend - SPA com Vue.js
+
+Para rodar a aplicação de frontend será necessário ter instalado o NodeJS 8.0+. Navegue até a pasta `frontend` e rode os comandos `npm install` e `npm run start`.
+
+A aplicação rodará em http://localhost:8080.
 
 ## Arquitetura
 
@@ -36,11 +44,7 @@ O pipeline de integração contínua está rodando no Travis CI, rodando os test
 
 ## Descrição da API
 
-A aplicação disponibiliza três endpoints:
-
-### GET http://localhost:8003/
-
-Fornece os arquivos estáticos responsáveis por renderizar o frontend.
+A aplicação disponibiliza dois endpoints:
 
 ### GET http://localhost:8003/api/cities
 
