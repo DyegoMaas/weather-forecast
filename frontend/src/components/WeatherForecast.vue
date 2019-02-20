@@ -4,10 +4,10 @@
       <h1>Previsão do Tempo</h1>
     </div>
     
-    <span v-if="noCities" class="label label-warning">Você ainda não consultou nenhuma cidade. Tente! Não dói.</span>
       <div>
         <input type="text" v-model="citySearched" placeholder="Nome da Cidade" />
         <button type="button" v-on:click="getForecastForCity()" class="btn btn-sm btn-primary search-button">Buscar</button>
+        <span v-if="noCities" class="label label-warning" style="margin-right: 10px">Você ainda não consultou nenhuma cidade. Tente! Não dói.</span>
       </div>
 
       <div class="page-header">
