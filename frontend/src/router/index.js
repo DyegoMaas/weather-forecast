@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Cities from '@/components/Cities';
+import WeatherForecast from '@/components/WeatherForecast';
 
 Vue.use(Router);
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Cities',
-      component: Cities,
+      name: 'WeatherForecast',
+      component: WeatherForecast,
     },
   ],
 });
