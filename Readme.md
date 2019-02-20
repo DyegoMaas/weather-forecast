@@ -22,7 +22,7 @@ A aplicação vai subir um servidor web auto-hospedado, rodando na **porta 8003*
 
 ### Frontend - SPA com Vue.js
 
-Para rodar a aplicação de frontend será necessário ter instalado o NodeJS 8.0+. Navegue até a pasta `frontend` e rode os comandos `npm install --dev` e `npm run start`.
+Para rodar a aplicação de frontend será necessário ter instalado o NodeJS 8.0+. Navegue até a pasta `frontend` e rode os comandos `npm install` e `npm run start`.
 
 A aplicação rodará em http://localhost:8080.
 
