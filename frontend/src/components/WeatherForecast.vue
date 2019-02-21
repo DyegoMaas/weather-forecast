@@ -21,7 +21,7 @@
             <th>Cidade</th>
             <th></th>
           </tr>
-          <tr v-for="(city, index) in cities" :key="index">
+          <tr v-for="(city, index) in allFound" :key="index">
             <td>
               <span style="margin-right: 10px">{{ index }}</span>
             </td>
@@ -32,7 +32,7 @@
               <button type="button" v-on:click="getDetails(city)" class="btn btn-sm btn-info details-button">Detalhes</button>
             </td>
           </tr>
-          <tr v-for="(city, index) in allNotFound" :key="index">
+          <tr v-for="(city, index) in allNotFound" :key="index+1000">
             <td>-</td>
             <td>
               <span>{{ city }}</span>
@@ -62,16 +62,24 @@ export default {
   },
   data() {
     return {
-      cities: [],
       citySearched: '',
-      currentCity: '',
       forecast: [],
       searchHistory: [],
+      selectedCity: ''
     };
   },
   computed: {
+    currentCity() {
+      if (this.selectedCity)
+        return this.selectedCity;
+      
+      const defaultCity = this.allFound.length > 0
+        ? this.allFound[0]
+        : '';
+      return defaultCity;
+    },
     noCities() {
-      return this.cities.length === 0;
+      return this.allFound.length === 0;
     },
     allFound() {
       return this.searchHistory
@@ -90,24 +98,17 @@ export default {
   methods: {
     refreshCitiesList() {
       const vm = this;
+
       this.$axios.get('/cities')
         .then((res) => {
-          vm.cities = res.data;
-          return vm.cities;
-        })
-        .then((cities) => {
-          //populate history
+          const cities = res.data;
+
           cities.forEach(city => {
-            vm.searchHistory.push({
-              name: city,
-              found: true
-            });
+            vm.updateSearchHistoryWith(city, true);
           });
         })
         .then(() => {
-          console.log('all', vm.allFound)
-          if (vm.allFound.length > 0)
-            vm.currentCity = vm.allFound[0]
+          vm.getDetails(vm.currentCity);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -118,42 +119,48 @@ export default {
       const vm = this;
 
       this.$axios.post(`/forecast/${vm.citySearched}`)
-        .then((res) => { vm.forecast = res.data; })
-        .then(() => { vm.updateSearchHistory(); })
-        .then(() => { vm.refreshCitiesList(); })
-        .then(() => { vm.showDetails(vm.citySearched); })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
-    },
-    updateSearchHistory() {
-      this.searchHistory.push({
-        name: this.citySearched,
-        found: this.forecast.length > 0
-      });
-    },
-    getDetails(city) {
-      const vm = this;
-
-      this.$axios.post(`/forecast/${city}`)
-        .then((res) => {
-          vm.currentCity = city;
+        .then((res) => { 
           vm.forecast = res.data;
-          vm.showDetails(city);
+
+          const foundAny = vm.forecast.length > 0;
+          vm.updateSearchHistoryWith(vm.citySearched, foundAny);
+          
+          if (foundAny) {
+            vm.selectCity(vm.citySearched);
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
     },
-    showDetails(city) {
-      this.currentCity = this.forecast.length > 0 ? city : '';
+    getDetails(city) {
+      const vm = this;
+
+      vm.selectCity(city);
+
+      this.$axios.post(`/forecast/${city}`)
+        .then((res) => {
+          vm.forecast = res.data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
     },
+    updateSearchHistoryWith(city, found) {
+       this.searchHistory.push({
+          name: city,
+          found: found
+        });
+    },
+    selectCity(city) {
+       this.selectedCity = city;
+    }
   },
   created() {
     this.refreshCitiesList();
-  },
+  },  
 };
 </script>
 
