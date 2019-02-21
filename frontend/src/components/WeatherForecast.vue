@@ -47,7 +47,7 @@
     </div>
     
     <template v-if="mustShowDetails">
-      <city-forecast :current-city="currentCity" :forecast="forecast"></city-forecast>
+      <city-forecast :current-city="currentCity" :forecast="selectedCity.forecast"></city-forecast>
     </template>
   </div>
 </template>
@@ -63,15 +63,17 @@ export default {
   data() {
     return {
       citySearched: '',
-      forecast: [],
       searchHistory: [],
-      selectedCity: ''
+      selectedCity: {
+        name: '',
+        forecast: [],
+      }
     };
   },
   computed: {
     currentCity() {
-      if (this.selectedCity)
-        return this.selectedCity;
+      if (this.selectedCity.name)
+        return this.selectedCity.name;
       
       const defaultCity = this.allFound.length > 0
         ? this.allFound[0]
@@ -120,13 +122,12 @@ export default {
 
       this.$axios.post(`/forecast/${vm.citySearched}`)
         .then((res) => { 
-          vm.forecast = res.data;
-
-          const foundAny = vm.forecast.length > 0;
+          const forecast = res.data;
+          const foundAny = forecast.length > 0;
           vm.updateSearchHistoryWith(vm.citySearched, foundAny);
-          
+
           if (foundAny) {
-            vm.selectCity(vm.citySearched);
+            vm.selectCity(vm.citySearched, forecast);
           }
         })
         .catch((error) => {
@@ -137,11 +138,10 @@ export default {
     getDetails(city) {
       const vm = this;
 
-      vm.selectCity(city);
-
       this.$axios.post(`/forecast/${city}`)
         .then((res) => {
-          vm.forecast = res.data;
+          const forecast = res.data;
+          vm.selectCity(city, forecast);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -154,8 +154,9 @@ export default {
           found: found
         });
     },
-    selectCity(city) {
-       this.selectedCity = city;
+    selectCity(city, forecast) {
+       this.selectedCity.name = city;
+       this.selectedCity.forecast = forecast;
     }
   },
   created() {
