@@ -4,9 +4,12 @@
       <h2>Previsão do tempo para {{ currentCity }}</h2>
     </div>
     <div class="row">
-      <div v-for="(button, index) in dayOfWeekButtonsDetails" :key="index" class="col-sm-2">
-        <p>{{ button.dayOfWeek }}</p>
-        <p>{{ button.minTemperature }}º {{ button.maxTemperature }}º</p>
+      <div v-for="(button, index) in dayOfWeekButtonsDetails" :key="index" class="col-sm-2 dayButton">
+        <p>
+          <img src="../assets/021-tornado.png" alt="..." class="weatherIcon">
+        </p>
+        <p class="text-center">{{ button.dayOfWeek }}</p>
+        <p class="text-center">{{ button.minTemperature }}º {{ button.maxTemperature }}º</p>
       </div>
     </div>
   </div>
@@ -65,4 +68,17 @@ export default {
 </script>
 
 <style>
+.dayButton {
+  background-color: #FEFFD7;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 100px;
+  height: 140px;
+  cursor: pointer
+}
+.weatherIcon {
+  max-width: 100%;
+  max-height: 100%;
+  margin-top: 5px;
+}
 </style>

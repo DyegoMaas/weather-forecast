@@ -32,10 +32,10 @@
               <button type="button" v-on:click="getDetails(city)" class="btn btn-sm btn-info details-button">Detalhes</button>
             </td>
           </tr>
-          <tr v-for="(city, index) in notFound" :key="index">
+          <tr v-for="(city, index) in allNotFound" :key="index">
             <td>-</td>
             <td>
-              <span>{{ city.name }}</span>
+              <span>{{ city }}</span>
             </td>
             <td>
               <span class="label label-danger details-button">Não encontrado</span>
@@ -65,7 +65,7 @@ export default {
       cities: [],
       citySearched: '',
       currentCity: '',
-      forecast: {},
+      forecast: [],
       searchHistory: [],
     };
   },
@@ -73,8 +73,15 @@ export default {
     noCities() {
       return this.cities.length === 0;
     },
-    notFound() {
-      return this.searchHistory.filter(search => !search.found);
+    allFound() {
+      return this.searchHistory
+        .filter(search => search.found)
+        .map(x => x.name);
+    },
+    allNotFound() {
+      return this.searchHistory
+        .filter(search => !search.found)
+        .map(x => x.name);
     },
     mustShowDetails() {
       return this.currentCity !== '';
@@ -86,6 +93,21 @@ export default {
       this.$axios.get('/cities')
         .then((res) => {
           vm.cities = res.data;
+          return vm.cities;
+        })
+        .then((cities) => {
+          //populate history
+          cities.forEach(city => {
+            vm.searchHistory.push({
+              name: city,
+              found: true
+            });
+          });
+        })
+        .then(() => {
+          console.log('all', vm.allFound)
+          if (vm.allFound.length > 0)
+            vm.currentCity = vm.allFound[0]
         })
         .catch((error) => {
           // eslint-disable-next-line
