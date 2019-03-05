@@ -3,33 +3,37 @@ import os
 import jsonpickle
 
 
+def try_access_file(func):
+    def func_wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as exception:
+            raise FileDataBaseException(exception)
+    return func_wrapper
+
+
 class JsonLinesRepository(ABC):
 
     def __init__(self, file_name):
         self._file_name = file_name
         self._encoding = 'utf8'
 
+    @try_access_file
     def get_all(self):
-        def read_lines():
-            if not os.path.isfile(self._file_name):
-                return []
+        if not self._database_file_exists():
+            return []
 
-            with open(self._file_name, 'r', encoding=self._encoding) as file:
-                for json in file:
-                    yield jsonpickle.decode(json.strip())
+        with open(self._file_name, 'r', encoding=self._encoding) as file:
+            return [jsonpickle.decode(json.strip()) for json in file]
 
-        try:
-            return read_lines()
-        except Exception as exception:
-            raise FileDataBaseException(exception)
-
+    @try_access_file
     def add(self, entity):
-        try:
-            with open(self._file_name, 'a', encoding=self._encoding) as file:
-                inline_json = jsonpickle.encode(entity) + '\n'
-                file.write(inline_json)
-        except Exception as exception:
-            raise FileDataBaseException(exception)
+        with open(self._file_name, 'a', encoding=self._encoding) as file:
+            inline_json = jsonpickle.encode(entity) + '\n'
+            file.write(inline_json)
+
+    def _database_file_exists(self):
+        return os.path.isfile(self._file_name)
 
 
 class FileDataBaseException(Exception):
